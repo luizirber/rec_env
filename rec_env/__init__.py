@@ -6,33 +6,29 @@ import re
 import yaml
 
 
-class NoEnvironmentSetException(Exception):
-    pass
-
-
 def load_configuration(yaml_string, kw=None):
     environ = yaml.safe_load(yaml_string)
     environ = _expand_config_vars(environ, updates=kw)
-
-    if environ is None:
-        raise NoEnvironmentSetException
 
     return environ
 
 
 def _rec_replace(env, value):
-    finder = re.compile('\[\{(\w*)\}\]')
-    ret_value = value
+    finder_subkeys = re.compile('\[\{(\w*)\}\]')
+    finder_vars = re.compile('\{(\w*)\}')
+    newvalue = value
 
-    try:
-        keys = finder.findall(value)
-    except TypeError:
-        return value
+    for k in finder_subkeys.findall(value):
+        newvalue = _rec_replace(env, newvalue.replace("{%s}" % k, env[k]))
 
-    for k in keys:
-        ret_value = _rec_replace(env, ret_value.replace("{%s}" % k, env[k]))
+    newvalue = newvalue.format(**env)
+    keys = finder_vars.findall(newvalue)
+    while keys:
+        for k in keys:
+            newvalue = _rec_replace(env, newvalue.replace("{%s}" % k, env[k]))
+        keys = finder_vars.findall(newvalue)
 
-    return ret_value.format(**env)
+    return newvalue
 
 
 def _env_replace(old_env, ref=None):
@@ -50,20 +46,13 @@ def _env_replace(old_env, ref=None):
                 new_env[k] = old_env[k]
             else:
                 # Yup, a dict. Need to replace recursively too.
-                all_data = dict(old_env)
-                if ref:
-                    all_data.update(ref)
-                new_env[k] = _env_replace(old_env[k], all_data)
+                new_env[k] = _env_replace(old_env[k],
+                                          ref if ref else old_env)
         else:
-            # if it is, check if we can substitute for booleans
-            if old_env[k].lower() == 'false':
-                new_env[k] = False
-            elif old_env[k].lower() == 'true':
-                new_env[k] = True
-            else:
                 # else start replacing vars
                 new_env[k] = _rec_replace(ref if ref else old_env,
-                                         old_env[k])
+                                          old_env[k])
+
     return new_env
 
 

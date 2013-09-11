@@ -17,6 +17,8 @@ hosts:
 clients:
   ios:
      provision: "{url}"
+     auth: "{hosts[{environment}]}/auth"
+api_version: 1
 '''
 
 
@@ -36,6 +38,16 @@ def test_recursive_replace_boolean_values():
     assert env['features']['backup'] is False
 
 
-def test_recursive_replace_nested():
+def test_recursive_replace_nested_simple():
     env = load_configuration(TEST_YAML)
     assert env['clients']['ios']['provision'] == "mycarrier.uat.urltest.net"
+
+
+def test_recursive_replace_nested_complex():
+    env = load_configuration(TEST_YAML)
+    assert env['clients']['ios']['auth'] == "uat.urltest.net/auth"
+
+
+def test_int_values():
+    env = load_configuration(TEST_YAML)
+    assert env['api_version'] == 1
