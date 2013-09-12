@@ -1,0 +1,1 @@
+[![Coverage Status](https://coveralls.io/repos/luizirber/rec_env/badge.png)](https://coveralls.io/r/luizirber/rec_env) [![Build Status](https://travis-ci.org/luizirber/rec_env.png?branch=master)](https://travis-ci.org/luizirber/rec_env)
