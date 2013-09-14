@@ -1,5 +1,9 @@
 #! /usr/bin/env python
 
+
+import pytest
+
+
 from rec_env import load_configuration
 
 
@@ -21,6 +25,10 @@ clients:
 api_version: 1
 '''
 
+CIRCULAR_YAML = '''
+carrier: "{circular}"
+circular: "{carrier}"
+'''
 
 def test_recursive_replace():
     env = load_configuration(TEST_YAML)
@@ -51,3 +59,9 @@ def test_recursive_replace_nested_complex():
 def test_int_values():
     env = load_configuration(TEST_YAML)
     assert env['api_version'] == 1
+
+
+def test_recursive_circular_variables():
+    # Notice: if this fails we probably made an AI or a parallel universe.
+    with pytest.raises(RuntimeError):
+        env = load_configuration(CIRCULAR_YAML)
