@@ -1,5 +1,5 @@
 -r requirements.txt
-pip==1.5.1
+pip==1.5.2
 setuptools==2.1
 wheel==0.22.0
 pytest-cov==1.6
