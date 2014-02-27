@@ -33,10 +33,14 @@ def _rec_replace(env, value, missing_fmt=None):
     keys = finder_vars.findall(newvalue)
     while keys:
         for k in keys:
-            newvalue = _rec_replace(env,
-                                    #newvalue.replace("{%s}" % k, env[k]),
-                                    fmt.format(newvalue, **env),
-                                    missing_fmt=missing_fmt)
+            try:
+                newvalue = _rec_replace(env,
+                                        newvalue.replace("{%s}" % k, env[k]),
+                                        missing_fmt=missing_fmt)
+            except KeyError:
+                newvalue = _rec_replace(env,
+                                        fmt.format(newvalue, **env),
+                                        missing_fmt=missing_fmt)
         keys = finder_vars.findall(newvalue)
 
     return newvalue
