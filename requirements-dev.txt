@@ -1,6 +1,7 @@
 -r requirements.txt
-pip==1.5.2
+pip==1.5.4
 setuptools==2.2
 wheel==0.22.0
+pytest==2.5.2
 pytest-cov==1.6
 pylint==1.1.0
