@@ -1,7 +1,7 @@
 -r requirements.txt
-pip==1.5.4
-setuptools==3.4.1
-wheel==0.23.0
-pytest==2.5.2
-pytest-cov==1.6
-pylint==1.1.0
+pip==19.0.1
+setuptools==40.7.1
+wheel==0.32.3
+pytest==4.2.0
+pytest-cov==2.6.1
+pylint==2.2.2
