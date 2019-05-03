@@ -3,5 +3,5 @@ pip==19.1
 setuptools==41.0.1
 wheel==0.33.1
 pytest==4.4.1
-pytest-cov==2.6.1
+pytest-cov==2.7.1
 pylint==2.3.1
