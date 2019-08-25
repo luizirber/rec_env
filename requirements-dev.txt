@@ -1,5 +1,5 @@
 -r requirements.txt
-pip==19.2.2
+pip==19.2.3
 setuptools==41.2.0
 wheel==0.33.6
 pytest==5.1.1
